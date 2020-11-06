@@ -2,8 +2,6 @@ package net.vikram.pmsrest.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,14 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vikram.springboot.PMSRESTAPI.exception.ResourceNotFoundException;
-import com.vikram.springboot.PMSRESTAPI.model.Project;
-import com.vikram.springboot.PMSRESTAPI.repository.ProjectRepository;
-
-
+import net.vikram.pmsrest.entity.Project;
+import net.vikram.pmsrest.exception.ResourceNotFoundException;
+import net.vikram.pmsrest.repository.ProjectRepository;
 
 @RestController 
-@RequestMapping("/api/v1")
+@RequestMapping("/api/projects")
 public class ProjectController {
 
 	@Autowired
@@ -30,19 +26,19 @@ public class ProjectController {
 	
 	//Get All project
 	
-	@GetMapping("/projects")
+	@GetMapping
 	public List<Project> getAllProjects()
 	{
 	return projectRepository.findAll();	
 	}
 	//Create  project
-	@PostMapping("/projects")
-	public Project createProjects(@Valid @RequestBody Project project)
+	@PostMapping
+	public Project createProjects(@RequestBody Project project)
 	{
 	return projectRepository.save(project);	
 	}
 	//Get project By Id
-	@GetMapping("/projects/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Project> getProjectById(@PathVariable(value = "id") Long projectId)
 			throws ResourceNotFoundException {
 		Project project = projectRepository.findById(projectId)
@@ -51,9 +47,9 @@ public class ProjectController {
 	}
 	
 	//Update a  project
-	@PutMapping("/projects/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Project> updateProject(@PathVariable(value = "id") Long projectId,
-			@Valid @RequestBody Project projectDetails) throws ResourceNotFoundException {
+			@RequestBody Project projectDetails) throws ResourceNotFoundException {
 		Project project = projectRepository.findById(projectId)
 				.orElseThrow(() -> new ResourceNotFoundException("Projct not found for this id :: " + projectId));
         project.setProjectId(projectDetails.getProjectId());
