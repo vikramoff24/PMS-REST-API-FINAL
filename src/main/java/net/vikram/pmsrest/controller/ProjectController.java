@@ -24,19 +24,20 @@ public class ProjectController {
 	@Autowired
 	private ProjectRepository projectRepository;
 	
-	//Get All project
-	
+	//Get all project
 	@GetMapping
 	public List<Project> getAllProjects()
 	{
 	return projectRepository.findAll();	
 	}
+	
 	//Create  project
 	@PostMapping
 	public Project createProjects(@RequestBody Project project)
 	{
 	return projectRepository.save(project);	
 	}
+	
 	//Get project By Id
 	@GetMapping("/{id}")
 	public ResponseEntity<Project> getProjectById(@PathVariable(value = "id") Long projectId)
@@ -49,28 +50,28 @@ public class ProjectController {
 	//Update a  project
 	@PutMapping("/{id}")
 	public ResponseEntity<Project> updateProject(@PathVariable(value = "id") Long projectId,
-			@RequestBody Project projectDetails) throws ResourceNotFoundException {
-		Project project = projectRepository.findById(projectId)
+			@RequestBody Project project) throws ResourceNotFoundException {
+		Project Existingproject = projectRepository.findById(projectId)
 				.orElseThrow(() -> new ResourceNotFoundException("Projct not found for this id :: " + projectId));
-        project.setProjectId(projectDetails.getProjectId());
-		project.setProjectName(projectDetails.getProjectName());
-		project.setDescription(projectDetails.getDescription());
-		project.setAuthorId(projectDetails.getAuthorId());
-		project.setStatus(projectDetails.getStatus());
+		Existingproject.setProjectId(project.getProjectId());
+        Existingproject.setProjectName(project.getProjectName());
+		Existingproject.setDescription(project.getDescription());
+		Existingproject.setAuthorId(project.getAuthorId());
+		Existingproject.setStatus(project.getStatus());
 		final Project updatedProject = projectRepository.save(project);
 		return ResponseEntity.ok(updatedProject);
 	}
+	
+	
 	//delete project by id
-		
-		@DeleteMapping("/projects/{id}")
-		public ResponseEntity deleteProject(@PathVariable(value = "id") Long projectId)
-				throws ResourceNotFoundException {
+	@DeleteMapping("/projects/{id}")
+	public ResponseEntity deleteProject(@PathVariable(value = "id") Long projectId)
+			throws ResourceNotFoundException {
 			projectRepository.findById(projectId)
 					.orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + projectId));
 
 			projectRepository.deleteById(projectId);
-//			Map<String, Boolean> response = new HashMap<>();
-//			response.put("deleted", Boolean.TRUE);
+			
 			return ResponseEntity.ok().build();
 		}
 	
