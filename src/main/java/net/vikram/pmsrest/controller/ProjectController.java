@@ -62,14 +62,13 @@ public class ProjectController {
 		return ResponseEntity.ok(updatedProject);
 	}
 	
-	
 	//delete project by id
 	@DeleteMapping("/projects/{id}")
 	public ResponseEntity deleteProject(@PathVariable(value = "id") Long projectId)
 			throws ResourceNotFoundException {
 			projectRepository.findById(projectId)
 					.orElseThrow(() -> new ResourceNotFoundException("Project not found for this id :: " + projectId));
-
+           
 			projectRepository.deleteById(projectId);
 			
 			return ResponseEntity.ok().build();
