@@ -12,7 +12,6 @@ import javax.persistence.Table;
 @Entity	
 @Table(name="projects")
 public class Project {
-	
 	@Id
     @Column(name="project_id")
 private long projectId;
